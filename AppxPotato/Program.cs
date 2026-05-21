@@ -10,6 +10,7 @@ namespace PNAC
 {
     class GetSystem
     {
+        private static string[] GlobalArgs;
         private static int dwThreadCount = 1;
 
         public class NamedPipeServerHelper
@@ -409,7 +410,11 @@ namespace PNAC
                 PROCESS_INFORMATION pi = new PROCESS_INFORMATION();
 
                 // IMPORTANT: use StringBuilder for lpCommandLine (Win32 requirement)
-                string cmdLine = "cmd.exe";
+                string cmdLine;
+                if (GlobalArgs == null || GlobalArgs.Length == 0)
+                    cmdLine = "cmd.exe";
+                else
+                    cmdLine = string.Join(" ", GlobalArgs);
 
                 Console.WriteLine("[+] Launching SYSTEM cmd.exe inline");
 
@@ -476,6 +481,7 @@ namespace PNAC
 
         static void Main(string[] args)
         {
+            GlobalArgs = args;
             SystemShell();
         }
     }
